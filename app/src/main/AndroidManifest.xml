@@ -17,6 +17,15 @@
         android:theme="@style/Theme.SmartTB"
         tools:targetApi="31">
         <activity
+            android:name=".user_Profile"
+            android:exported="false" />
+        <activity
+            android:name=".updateProfile"
+            android:exported="false" />
+        <activity
+            android:name=".detailRiwayat"
+            android:exported="false" />
+        <activity
             android:name=".Login.ForgotPassword"
             android:exported="false" />
         <activity
@@ -25,16 +34,19 @@
         <activity
             android:name=".Login.loginpage"
             android:exported="true">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>
