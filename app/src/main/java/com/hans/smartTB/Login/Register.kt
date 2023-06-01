@@ -44,7 +44,7 @@ class Register : AppCompatActivity() {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
             val data = baos.toByteArray()
 
-            val email = binding.edtEmailRegister.text.toString()
+            val email = binding.edtEmailRegister.text.toString().lowercase()
             val password = binding.edtPasswordRegister.text.toString()
             val repassword = binding.edtPassword2Register.text.toString()
             val nama = binding.edtNamaRegister.text.toString()
@@ -125,7 +125,7 @@ class Register : AppCompatActivity() {
                         "gender" to hasilGender,
                         "foto" to foto,
                     )
-                    val email = auth.currentUser?.email
+                    val email = auth.currentUser?.email!!.lowercase()
                     firestore.collection("users").document(email!!)
                         .set(user)
                         .addOnSuccessListener { documentReference ->

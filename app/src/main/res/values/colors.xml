@@ -30,4 +30,5 @@
     <color name="colorAccent">#51c569</color>
     <color name="yellow">#e4fd1f</color>
     <color name="yellowtrans">#50e4fd1f</color>
+    <color name="orange">#FF9800</color>
 </resources>

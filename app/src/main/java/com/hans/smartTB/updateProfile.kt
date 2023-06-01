@@ -10,12 +10,14 @@ import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,6 +28,7 @@ import java.io.File
 import java.io.IOException
 import java.util.*
 import com.yalantis.ucrop.UCrop
+import java.text.SimpleDateFormat
 
 
 class updateProfile : AppCompatActivity() {
@@ -33,6 +36,7 @@ class updateProfile : AppCompatActivity() {
     private lateinit var urifoto:Uri
     private lateinit var hasilGender: String
     private lateinit var binding: ActivityUpdateProfileBinding
+    private lateinit var currentPhotoPath:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityUpdateProfileBinding.inflate(layoutInflater)
@@ -92,10 +96,38 @@ class updateProfile : AppCompatActivity() {
         builder.setTitle(getString(R.string.app_name))
         builder.setIcon(R.mipmap.ic_launcher)
         builder.setItems(items) { dialog: DialogInterface, item: Int ->
+//            if (items[item] == "Take Photo") {
+//                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//                startActivityForResult(intent, 10)
+//            }
             if (items[item] == "Take Photo") {
-                val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(intent, 10)
-            } else if (items[item] == "Choose from Library") {
+                // Ambil gambar menggunakan kamera
+                Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                    // Pastikan ada aplikasi kamera yang dapat menangani intent ini
+                    takePictureIntent.resolveActivity(packageManager)?.also {
+                        // Buat file gambar sementara untuk menyimpan hasil kamera
+                        val photoFile: File? = try {
+                            createImageFile()
+                        } catch (ex: IOException) {
+                            // Error saat membuat file
+                            Toast.makeText(this, "Error creating image file", Toast.LENGTH_SHORT)
+                                .show()
+                            null
+                        }
+                        // Jika file berhasil dibuat, lanjutkan mengambil gambar dari kamera
+                        photoFile?.also {
+                            val photoURI: Uri = FileProvider.getUriForFile(
+                                this,
+                                "com.hans.smartTB.fileprovider",
+                                it
+                            )
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                            startActivityForResult(takePictureIntent, 10)
+                        }
+                    }
+                }
+            }
+            else if (items[item] == "Choose from Library") {
                 val intent = Intent(Intent.ACTION_PICK)
                 intent.type = "image/*"
                 startActivityForResult(Intent.createChooser(intent, "Select Image"), 20)
@@ -112,20 +144,19 @@ class updateProfile : AppCompatActivity() {
         //import gambar dari galeri
         if (requestCode == 20 && resultCode == RESULT_OK && data != null) {
             val path: Uri? = data.data
+
             //crop
             path?.let { startCrop(it) }
         }
 
         //kamera
         if (requestCode == 10 && resultCode == RESULT_OK) {
-            val extras = data!!.extras
-            val bitmap = extras!!["data"] as Bitmap?
-            val imageUri = Uri.parse(MediaStore.Images.Media.insertImage(contentResolver, bitmap, "Title", null))
+            val imageUri = Uri.fromFile(File(currentPhotoPath))
             val path = Uri.fromFile(File(cacheDir, "IMG_" + System.currentTimeMillis()))
 
             //crop
             val options = UCrop.Options()
-            options.setCompressionQuality(80)
+            options.setCompressionQuality(100)
             options.setToolbarTitle(getString(R.string.app_name))
             options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
             options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
@@ -134,9 +165,9 @@ class updateProfile : AppCompatActivity() {
             options.setCompressionFormat(Bitmap.CompressFormat.JPEG)
             UCrop.of(imageUri!!, path)
                 .withAspectRatio(1f, 1f)
+                .withMaxResultSize(720,720)
                 .withOptions(options)
                 .start(this)
-
         }
 
         //menangkap hasil cropping dan update imageview
@@ -152,6 +183,22 @@ class updateProfile : AppCompatActivity() {
         } else if (resultCode == UCrop.RESULT_ERROR) {
             val cropError = UCrop.getError(data!!)
             Toast.makeText(this, cropError?.message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Membuat file gambar sementara untuk menyimpan hasil kamera
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Membuat nama file
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir: File = getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* prefix */
+            ".jpg", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            // Simpan path file di variabel global
+            currentPhotoPath = absolutePath
         }
     }
 
@@ -182,6 +229,7 @@ class updateProfile : AppCompatActivity() {
         val edPhone = binding.updateNomor.text.toString().trim()
         val edGender = hasilGender.trim()
 
+        //konversi bitmap menjadi ByteArray untuk dikirim ke FStorage
         binding.imageProfile.isDrawingCacheEnabled = true
         binding.imageProfile.buildDrawingCache()
         val bitmap = Bitmap.createBitmap(binding.imageProfile.drawingCache)

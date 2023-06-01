@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cvInput"
+            android:id="@+id/cvHarga"
             android:layout_width="0dp"
             android:layout_height="180dp"
             android:layout_margin="10dp"
@@ -30,13 +30,13 @@
                 <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
-                    android:src="@drawable/ic_truk" />
+                    android:src="@drawable/ic_price" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Jemput Sampah"
+                    android:text="Harga Sampah"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -97,7 +97,7 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cvHistory"
+            android:id="@+id/cvRiwayat"
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:layout_margin="10dp"

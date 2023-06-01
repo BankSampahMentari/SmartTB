@@ -34,7 +34,7 @@ class loginpage : AppCompatActivity() {
         }
 
         binding.btnLogin.setOnClickListener{
-            val email = binding.edtEmailLogin.text.toString()
+            val email = binding.edtEmailLogin.text.toString().lowercase()
             val password = binding.edtPasswordLogin.text.toString()
 
             //Validasi Email
@@ -65,7 +65,7 @@ class loginpage : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) {
                 if (it.isSuccessful) {
-                    val usermail = auth.currentUser?.email
+                    val usermail = auth.currentUser?.email!!.lowercase()
                     val db = FirebaseFirestore.getInstance()
                     val cekDoc = db.collection("users").document(usermail!!)
                     cekDoc.get().addOnSuccessListener {
@@ -98,7 +98,7 @@ class loginpage : AppCompatActivity() {
         super.onStart()
         if (auth.currentUser != null){
             val intent = Intent (this, MainActivity::class.java).also {
-                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             startActivity(intent)
         }

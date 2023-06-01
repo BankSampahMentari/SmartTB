@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hans.smartTB.Adapter.RiwayatAdapter
 import com.hans.smartTB.Model.dataRiwayat
@@ -14,13 +15,10 @@ import com.hans.smartTB.databinding.FragmentRiwayatBinding
 
 
 class riwayat : Fragment() {
-
-
     private lateinit var binding: FragmentRiwayatBinding
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRiwayatBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
@@ -37,7 +35,8 @@ class riwayat : Fragment() {
     }
 
     private fun riwayatPesanan() {
-        val listPesananRiwayat = FirebaseFirestore.getInstance().collection("pesanan")
+        val usermail = FirebaseAuth.getInstance().currentUser?.email
+        val listPesananRiwayat = FirebaseFirestore.getInstance().collection("users").document(usermail.toString()).collection("riwayat")
         listPesananRiwayat.get()
             .addOnSuccessListener { documents ->
                 for (document in documents)
