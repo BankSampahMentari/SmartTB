@@ -25,6 +25,9 @@ class loginpage : AppCompatActivity() {
 
         binding.ForgetPassword.setOnClickListener {
             val intent = Intent(this, ForgotPassword::class.java)
+            if (binding.edtEmailLogin.text != null)
+                intent.putExtra("email", binding.edtEmailLogin.text.toString()) else
+                intent.putExtra("email", "")
             startActivity(intent)
         }
 
@@ -98,7 +101,7 @@ class loginpage : AppCompatActivity() {
         super.onStart()
         if (auth.currentUser != null){
             val intent = Intent (this, MainActivity::class.java).also {
-//                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                it.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             startActivity(intent)
         }

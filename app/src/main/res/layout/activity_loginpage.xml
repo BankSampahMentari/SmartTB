@@ -21,8 +21,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/logo"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/bg_rounded_white"/>
+            android:scaleType="centerInside"
+            android:layout_centerHorizontal="true" />
 
         <ImageView
             android:id="@+id/tekslogo"
@@ -30,7 +30,7 @@
             android:layout_height="50dp"
             android:src="@drawable/tekslogo"
             android:layout_below="@id/logo"
-            android:background="@color/white"
+            android:background="@drawable/bg_rounded_white"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="10dp"/>
     </RelativeLayout>
@@ -104,17 +104,6 @@
                     android:background="@drawable/bg_rounded_trans"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/ForgetPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/black"
-                android:text="Forgot Password?"
-                android:textAlignment="textEnd"
-                android:textColor="#d9ead3"
-                android:textStyle="bold" />
-
             <Button
                 android:id="@+id/btn_login"
                 android:layout_width="match_parent"
@@ -123,6 +112,31 @@
                 android:backgroundTint="#38761d"
                 android:text="MASUK"
                 android:textColor="@color/white" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Lupa Kata Sandi? "
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/ForgetPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/black"
+                    android:text="Atur Ulang"
+                    android:layout_marginTop="10dp"
+                    android:textAlignment="textEnd"
+                    android:textColor="@color/yellow"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"

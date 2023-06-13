@@ -1,15 +1,14 @@
 package com.hans.smartTB
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RectShape
 import android.graphics.drawable.shapes.RoundRectShape
 import android.os.Bundle
 import android.text.SpannableString
@@ -21,36 +20,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.LatLng
 import com.hans.smartTB.Fragment.riwayat
 import com.hans.smartTB.Login.loginpage
 import com.hans.smartTB.databinding.ActivityMainBinding
-import com.hans.smartTB.databinding.ContentMainBinding
 
-
-lateinit var binding : ActivityMainBinding
-lateinit var auth: FirebaseAuth
-private lateinit var foto : String
-lateinit var database: FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var binding : ActivityMainBinding
+    lateinit var auth: FirebaseAuth
+    private lateinit var foto : String
+    lateinit var database: FirebaseDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         // Langkah 1: Menghubungkan aplikasi Android ke Realtime Database Firebase
         database = FirebaseDatabase.getInstance()
         auth = FirebaseAuth.getInstance()
 
         fetchData()
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        setContentView(binding.root)
-
+        binding.mapView.onCreate(savedInstanceState)
         //navbar
         binding.bottomNavigationView.setOnItemSelectedListener {
             when(it.itemId){
@@ -90,6 +91,16 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
     }
 
     private fun hidefragment(fragment: Fragment) {
@@ -195,6 +206,7 @@ class MainActivity : AppCompatActivity() {
         val email = auth.currentUser?.email!!.lowercase()
         val reference = database.getReference("Node")
 
+        //fetch data user
         var Fstore = FirebaseFirestore.getInstance().collection("users").document(email!!)
         Fstore.get().addOnSuccessListener{
          if (it != null) {
@@ -212,6 +224,7 @@ class MainActivity : AppCompatActivity() {
          }
         }
 
+        //fetch data alat user
         reference.orderByChild("Email").equalTo(email).addValueEventListener(object : ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children)
@@ -236,14 +249,30 @@ class MainActivity : AppCompatActivity() {
                     if (latt != null && long != null){
                         binding.tvLattitude.text = "lattitude : $latt"
                         binding.tvLongitude.text = "longitude : $long"
+                        binding.mapView.getMapAsync {
+                            //menyesuaikan tema
+                            val isDarkTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+                            if (isDarkTheme) {
+                                val mapStyleOptions = MapStyleOptions.loadRawResourceStyle(applicationContext, R.raw.map_style_night)
+                                it.setMapStyle(mapStyleOptions)
+                            } else {
+                                it.setMapStyle(null)
+                            }
+                            //menambahkan titik
+                            Log.d("TAG", "Menampilkan marker pada peta")
+                            val koordinat = com.google.android.gms.maps.model.LatLng(latt.toDouble(), long.toDouble())
+                            it.addMarker(MarkerOptions().position(koordinat).title("$node"))
+                            it.moveCamera(CameraUpdateFactory.newLatLngZoom(koordinat, 15f))
+                        }
                     }
+//                    else binding.mapView.visibility= View.GONE
 
                     //cek kapasitas baterai
-                    val baterai = snapshot.child("Baterai").getValue(String::class.java)?.toFloat()
-                    val persen = ((baterai!! - 3) / 1.2) * 100
+                    val persen = snapshot.child("Baterai").getValue(String::class.java)?.toFloat()
+//                    val persen = ((baterai!! - 3) / 1.2) * 100
                     binding.tvBaterai.text = "Baterai : ${persen?.toInt()}%"
                     binding.tvBateraibar.text = "${persen?.toInt()}%"
-                    updateIconBaterai(persen.toFloat())
+                    updateIconBaterai(persen!!.toFloat())
                 }
             }
 

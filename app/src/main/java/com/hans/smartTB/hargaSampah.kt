@@ -1,5 +1,6 @@
 package com.hans.smartTB
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.firebase.Timestamp
@@ -34,7 +35,10 @@ class hargaSampah : AppCompatActivity() {
                 binding.tanggalUpdate.text = "Harga Terbaru Per: $formattedTimestamp"
             }
 
-
+        //back button
+        binding.toolbar.setNavigationOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 
     private fun formatTimestamp(timestamp: com.google.firebase.Timestamp?): String {

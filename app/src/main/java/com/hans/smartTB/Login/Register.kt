@@ -117,7 +117,7 @@ class Register : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener(this){
                 if (it.isSuccessful){
-//                    Toast.makeText(this, "Register Berhasil", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Register Berhasil", Toast.LENGTH_SHORT).show()
                     val user = hashMapOf<String, Any>(
                         "email" to email,
                         "name" to nama,
@@ -129,7 +129,7 @@ class Register : AppCompatActivity() {
                     firestore.collection("users").document(email!!)
                         .set(user)
                         .addOnSuccessListener { documentReference ->
-                            Toast.makeText(this, "Register Berhasil", Toast.LENGTH_LONG).show()
+//                            Toast.makeText(this, "Register Berhasil", Toast.LENGTH_LONG).show()
                         }
                         .addOnFailureListener { exception ->
                             Log.w(ContentValues.TAG, "Error adding document $exception")
