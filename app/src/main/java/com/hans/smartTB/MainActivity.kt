@@ -237,7 +237,7 @@ class MainActivity : AppCompatActivity() {
                     val Maxsampah = 100
                     if (jarak != null && jarak <= Maxsampah)
                     {
-                        val persentase = (Maxsampah - jarak!!).toInt()
+                        val persentase = (((Maxsampah - jarak!!)/Maxsampah)*100).toInt()
                         binding.pbKapasitas.progress = persentase
                         binding.tvProgress.text = "$persentase%"
                         binding.tvKapasitas.text = "Kapasitas Terpakai : $persentase%"

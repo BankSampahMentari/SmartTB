@@ -48,6 +48,10 @@ class RiwayatAdapter(private val context: Context, private var ListRiwayat: Muta
         holder.cardRiwayat.setOnClickListener {
             val intent = Intent(context, detailRiwayat::class.java)
             intent.putExtra("docID", ListRiwayat[position].docID)
+            intent.putExtra("tanggal", formattedTimestamp)
+            intent.putExtra("nama", ListRiwayat[position].namaNasabah)
+            intent.putExtra("total", ListRiwayat[position].pendapatan.toString())
+            intent.putExtra("status", ListRiwayat[position].status.toString())
             context.startActivity(intent)
         }
 
