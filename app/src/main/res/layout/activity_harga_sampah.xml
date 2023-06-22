@@ -102,8 +102,8 @@
                 <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:backgroundTint="#FAFFF6">
+                    android:padding="2dp"
+                    android:background="@drawable/bg_cardview_stroke_10dp">
 
                     <TableRow
                         android:background="@drawable/bg_rounded_top">
