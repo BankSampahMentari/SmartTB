@@ -111,6 +111,19 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_cardview_stroke_10dp">
 
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/TrashCan"
+                    android:padding="25dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Wah, Kamu Belum Memiliki Perangkat Smart Trash Can Nih. \nSegera Hubungi Admin Bank Sampah Mentari yaa, Agar Kamu Dapat Menikmati Fitur Penuh Aplikasi Ini 😊 "
+                    android:gravity="center"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,6 +140,7 @@
                     android:layout_marginTop="20dp">
 
                     <TextView
+                        android:id="@+id/tvSmartTC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Trash Can Milikmu"
