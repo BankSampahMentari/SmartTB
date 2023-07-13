@@ -264,9 +264,13 @@ class MainActivity : AppCompatActivity() {
 
                                 //cek kapasitas tempat sampah
                                 val jarak = snapshot.child("jarak").getValue(String::class.java)?.toFloat()
-                                val Maxsampah = 100
+                                val Maxsampah = 60
                                 if (jarak != null && jarak <= Maxsampah) {
-                                    val persentase = (((Maxsampah - jarak!!) / Maxsampah) * 100).toInt()
+                                    var persentase = (((Maxsampah - jarak!!) / (Maxsampah - 10)) * 100).toInt()
+                                    when {
+                                        persentase <=1 -> persentase = 1
+                                        persentase >= 100 -> persentase = 100
+                                    }
                                     binding.pbKapasitas.progress = persentase
                                     binding.tvProgress.text = "$persentase%"
                                     binding.tvKapasitas.text = "Kapasitas Terpakai : $persentase%"
@@ -351,6 +355,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        val soundUri = Uri.parse("android.resource://" + packageName + "/" + R.raw.android_low_battery)
         notificationBuilder.setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setWhen(System.currentTimeMillis())
@@ -359,9 +364,9 @@ class MainActivity : AppCompatActivity() {
             .setContentText("Baterai Perangkat Tersisa $baterai%, Mohon Segera Isi Ulang")
             .setContentInfo("Info")
             .setContentIntent(pendingIntent)
-
-        val soundUri = Uri.parse("android.resource://" + packageName + "/" + R.raw.android_low_battery)
-        notificationBuilder.setSound(soundUri)
+            .setSound(soundUri)
+            .setSilent(false)
+            .setPriority(2)
 
         notificationManager.notify(1, notificationBuilder.build())
     }
