@@ -317,6 +317,9 @@ class MainActivity : AppCompatActivity() {
                                 if (persen != null && persen <= 15) {
                                     notifikasiBaterai(persen.toInt())
                                 }
+                                if(persen != null && persen <= 5) {
+                                    EmergencyNotification(persen.toInt())
+                                }
                             }
                         }
 
@@ -369,6 +372,38 @@ class MainActivity : AppCompatActivity() {
             .setPriority(2)
 
         notificationManager.notify(1, notificationBuilder.build())
+    }
+
+    fun EmergencyNotification(baterai: Int) {
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        val channelId = "emergency_channel"
+        val channelName = "Battery Runs Out"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val notificationChannel = NotificationChannel(channelId, channelName, importance)
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.RED
+            notificationChannel.enableVibration(true)
+            notificationChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        val soundUri = Uri.parse("android.resource://" + packageName + "/" + R.raw.android_low_battery)
+        notificationBuilder.setAutoCancel(true)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.logo)
+            .setContentTitle("Baterai Habis")
+            .setContentText("Baterai Perangkat Tersisa $baterai%, Perangkat Akan Segera Dinonaktifkan")
+            .setContentInfo("Info")
+            .setContentIntent(pendingIntent)
+            .setSound(soundUri)
+            .setSilent(false)
+            .setPriority(2)
+
+        notificationManager.notify(2, notificationBuilder.build())
     }
 
     private fun updateIconBaterai(baterai: Float?) {
