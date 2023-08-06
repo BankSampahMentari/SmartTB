@@ -256,6 +256,7 @@ class MainActivity : AppCompatActivity() {
                     binding.pbKapasitas.visibility = View.GONE
                     binding.tvProgress.visibility = View.GONE
                     binding.TrashCan.visibility = View.VISIBLE
+                    binding.alamatNasabah.visibility = View.GONE
                 } else
                 {
                     dataSensor.addValueEventListener(object : ValueEventListener {
