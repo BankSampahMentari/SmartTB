@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:fillViewport="true"
+        tools:ignore="MissingConstraints">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
@@ -216,15 +227,15 @@
                     android:id="@+id/tv_bateraibar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/iv_baterai"
                     android:text="0%"
                     android:textColor="@color/colorPrimary"
-                    android:layout_marginBottom="20dp"
                     android:textSize="14sp"
+                    android:layout_alignTop="@id/iv_baterai"
                     android:layout_alignRight="@id/iv_baterai"
                     android:layout_alignLeft="@id/iv_baterai"
                     android:layout_centerVertical="false"
-                    android:gravity="center_horizontal" />
+                    android:layout_marginTop="90dp"
+                    android:gravity="center" />
 
                 <ProgressBar
                     android:id="@+id/pb_kapasitas"
@@ -250,11 +261,24 @@
 
             </RelativeLayout>
 
+                <TextView
+                    android:id="@+id/alamatNasabah"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Alamat: "
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:layout_below="@id/relative1"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginEnd="20dp"/>
+
                 <com.google.android.gms.maps.MapView
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_below="@id/relative1"
+                    android:layout_below="@id/alamatNasabah"
                     android:layout_marginStart="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginEnd="20dp"
@@ -284,13 +308,17 @@
 
     </LinearLayout>
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="NotSibling">
 
     </FrameLayout>
 

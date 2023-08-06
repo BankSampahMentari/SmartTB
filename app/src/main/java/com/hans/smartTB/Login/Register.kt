@@ -49,6 +49,7 @@ class Register : AppCompatActivity() {
             val repassword = binding.edtPassword2Register.text.toString()
             val nama = binding.edtNamaRegister.text.toString()
             val phone = binding.edtNomorhpRegister.text.toString()
+            val alamat = binding.edtAlamatRegister.text.toString()
 
             val cekGender = findViewById<RadioButton>(binding.rgGender.checkedRadioButtonId)
             val hasilGender = "${cekGender.text}"
@@ -86,6 +87,11 @@ class Register : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            if (alamat.isEmpty() || email.isEmpty() || nama.isEmpty() || phone.isEmpty()) {
+                Toast.makeText(this, "Mohon Pastikan Semua Data Telah Terisi", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             //Upload foto ke firebase
             val storage = FirebaseStorage.getInstance()
             val reference = storage.getReference("images_user").child("IMG"+ Date().time +".jpeg")
@@ -98,7 +104,7 @@ class Register : AppCompatActivity() {
                         taskSnapshot.metadata!!.reference!!.downloadUrl.addOnCompleteListener {
                             //setelah berhasil upload foto, upload data user
                             var foto = it.getResult().toString()
-                            RegisterFirebase(email,password, nama, phone, hasilGender, foto)
+                            RegisterFirebase(email,password, nama, phone, hasilGender, foto, alamat)
                         }
                     }else{
                         Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show()
@@ -113,7 +119,7 @@ class Register : AppCompatActivity() {
 
     }
 
-    private fun RegisterFirebase(email: String, password: String, nama: String, phone: String, hasilGender: String, foto : String) {
+    private fun RegisterFirebase(email: String, password: String, nama: String, phone: String, hasilGender: String, foto : String, alamat:String) {
         auth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener(this){
                 if (it.isSuccessful){
@@ -124,6 +130,7 @@ class Register : AppCompatActivity() {
                         "phone" to phone,
                         "gender" to hasilGender,
                         "foto" to foto,
+                        "alamat" to alamat
                     )
                     val email = auth.currentUser?.email!!.lowercase()
                     firestore.collection("users").document(email!!)

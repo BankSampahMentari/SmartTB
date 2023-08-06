@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,9 @@
     android:padding="30dp"
     tools:context=".Login.Register">
 
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="350dp"
@@ -112,6 +114,25 @@
                         android:layout_height="wrap_content"
                         android:inputType="number"
                         android:textAllCaps="true"
+                        android:background="@drawable/bg_rounded_trans"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Alamat"
+                    app:boxBackgroundColor="@color/white"
+                    android:layout_marginTop="5dp"
+                    app:startIconDrawable="@drawable/baseline_pin_drop_24"
+                    app:boxStrokeWidth="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_alamat_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textAllCaps="false"
                         android:background="@drawable/bg_rounded_trans"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -268,7 +289,5 @@
 
 
         </androidx.cardview.widget.CardView>
-
-
-
-</RelativeLayout>
+    </RelativeLayout>
+</ScrollView>

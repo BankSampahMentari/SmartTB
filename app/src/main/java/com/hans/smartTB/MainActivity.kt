@@ -231,6 +231,8 @@ class MainActivity : AppCompatActivity() {
              Glide.with(this)
                  .load(foto)
                  .into(binding.imageProfile)
+
+             binding.alamatNasabah.text = "Alamat: \n" + it.getString("alamat").toString()
          }else{
              Toast.makeText(this, "Error", Toast.LENGTH_LONG).show()
          }
@@ -264,7 +266,7 @@ class MainActivity : AppCompatActivity() {
 
                                 //cek kapasitas tempat sampah
                                 val jarak = snapshot.child("jarak").getValue(String::class.java)?.toFloat()
-                                val Maxsampah = 60
+                                val Maxsampah = 55
                                 if (jarak != null && jarak <= Maxsampah) {
                                     var persentase = (((Maxsampah - jarak!!) / (Maxsampah - 10)) * 100).toInt()
                                     when {

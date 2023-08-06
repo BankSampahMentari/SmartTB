@@ -45,6 +45,7 @@ class user_Profile : AppCompatActivity() {
                 val drawableLeft = resources.getDrawable(R.drawable.baseline_woman_24, null)
                 binding.genderUser.setCompoundDrawablesWithIntrinsicBounds(drawableLeft, null, null, null)
             }
+            binding.alamatUser.text = it.getString("alamat")
 
         }
 
@@ -55,6 +56,7 @@ class user_Profile : AppCompatActivity() {
                 .putExtra("gender", binding.genderUser.text)
                 .putExtra("email", emailuser)
                 .putExtra("foto", foto)
+                .putExtra("alamat", binding.alamatUser.text)
             startActivity(intent)
         }
 

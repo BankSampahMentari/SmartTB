@@ -100,6 +100,25 @@
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Alamat"
+                    app:boxBackgroundColor="@color/white"
+                    android:layout_marginTop="5dp"
+                    app:startIconDrawable="@drawable/baseline_pin_drop_24"
+                    app:boxStrokeWidth="0dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_alamat_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:textAllCaps="false"
+                        android:background="@drawable/bg_rounded_trans"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <TextView
                     android:id="@+id/txt_gender_register"
                     android:layout_width="match_parent"

@@ -57,6 +57,7 @@ class updateProfile : AppCompatActivity() {
             val emailUpdate = bundle.getString("email")?.trim()
             val genderUpdate = bundle.getString("gender")?.trim()
             val phoneUpdate = bundle.getString("phone")?.trim()
+            val alamatUpdate = bundle.getString("alamat")?.trim()
 
             binding.updateNama.setText("$namaUpdate")
             binding.updateEmail.setText("$emailUpdate")
@@ -71,6 +72,8 @@ class updateProfile : AppCompatActivity() {
             if (foto != ""){
                 Glide.with(this).load(bundle?.getString("foto")).into(binding.imageProfile)
             }
+
+            binding.edtAlamatEdit.setText("$alamatUpdate")
 
         }
 
@@ -239,6 +242,7 @@ class updateProfile : AppCompatActivity() {
         val edEmail = binding.updateEmail.text.toString().trim()
         val edPhone = binding.updateNomor.text.toString().trim()
         val edGender = hasilGender.trim()
+        val edAlamat = binding.edtAlamatEdit.text.toString().trim()
 
         //konversi bitmap menjadi ByteArray untuk dikirim ke FStorage
         binding.imageProfile.isDrawingCacheEnabled = true
@@ -282,6 +286,7 @@ class updateProfile : AppCompatActivity() {
                             "phone" to edPhone,
                             "gender" to edGender,
                             "foto" to editfoto,
+                            "alamat" to edAlamat
                         )
                         val auth = FirebaseAuth.getInstance()
                         val email = auth.currentUser?.email
