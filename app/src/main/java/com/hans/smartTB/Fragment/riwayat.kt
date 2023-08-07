@@ -1,6 +1,7 @@
 package com.hans.smartTB.Fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.hans.smartTB.Adapter.RiwayatAdapter
 import com.hans.smartTB.Model.dataRiwayat
 import com.hans.smartTB.R
@@ -35,16 +37,17 @@ class riwayat : Fragment() {
 
     private fun riwayatPesanan() {
         val usermail = FirebaseAuth.getInstance().currentUser?.email
-        val listPesananRiwayat = FirebaseFirestore.getInstance().collection("riwayat").whereEqualTo("email", usermail)
-        listPesananRiwayat.get()
+        val listRiwayat = FirebaseFirestore.getInstance().collection("riwayat").whereEqualTo("email", usermail)
+        listRiwayat.orderBy("tanggal", Query.Direction.DESCENDING).get()
             .addOnSuccessListener { documents ->
                 for (document in documents)
                 {
                     val riwayat = documents.toObjects(dataRiwayat::class.java)
                     binding.recyclerViewRiwayat.adapter = context?.let { RiwayatAdapter(it, riwayat) }
-
                 }
-
+            }
+            .addOnFailureListener {
+                Log.w("riwayat", it.message.toString())
             }
     }
 }
